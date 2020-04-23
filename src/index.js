@@ -28,7 +28,7 @@ import RTL from "layouts/RTL.js";
 
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
-const hist = createBrowserHistory();
+export const hist = createBrowserHistory();
 
 ReactDOM.render(
   <Provider store={Store}>

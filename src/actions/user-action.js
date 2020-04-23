@@ -1,4 +1,4 @@
-import {login} from "../services/user-service";
+import { login } from "../services/user-service";
 
 function setLoggedInUserAction(user) {
   return {

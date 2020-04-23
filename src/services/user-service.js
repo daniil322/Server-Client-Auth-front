@@ -9,7 +9,7 @@ let axios = Axios.create({
 });
 
 async function login(user) {
-    const userData = await axios.post(`${BASE_URL}`, user)
+    const userData = await axios.get(`${BASE_URL}`, user)
     return userData.data
 }
 

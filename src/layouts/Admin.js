@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -16,6 +16,8 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
+import { useSelector } from "react-redux";
+import Progress from "rsup-progress";
 
 let ps;
 
@@ -40,6 +42,14 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
+  const { appState } = useSelector((state) => state);
+  const [progress] = useState(new Progress());
+  if (appState === "loading") {
+    progress.start();
+  } else {
+    progress.end();
+  }
+
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices

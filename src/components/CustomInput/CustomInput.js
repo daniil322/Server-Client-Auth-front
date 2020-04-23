@@ -26,6 +26,8 @@ export default function CustomInput(props) {
     success,
     onChange,
     name,
+    value,
+    required,
   } = props;
 
   const labelClasses = classNames({
@@ -61,6 +63,8 @@ export default function CustomInput(props) {
           underline: underlineClasses,
         }}
         onChange={onChange}
+        value={value}
+        required={required}
         id={id}
         name={name}
         {...inputProps}

@@ -19,7 +19,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { Provider } from "react-redux";
-import Store from "./store/user-store";
+import Store from "./store/userStore";
 import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
@@ -36,7 +36,7 @@ ReactDOM.render(
       <Switch>
         <Route path="/admin" component={Admin} />
         <Route path="/rtl" component={RTL} />
-        <Redirect from="/" to="/admin/dashboard" />
+        <Redirect from="/" to="/admin/login" />
       </Switch>
     </Router>
   </Provider>,

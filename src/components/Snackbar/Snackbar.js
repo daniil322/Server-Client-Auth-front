@@ -12,12 +12,17 @@ import styles from "assets/jss/material-dashboard-react/components/snackbarConte
 
 const useStyles = makeStyles(styles);
 
-export default function Snackbar(props) {
+export default function Snackbar( props ) {
   const classes = useStyles();
-  const { message, color, close, icon, place, open, rtlActive } = props;
+  let { message, color, close, icon, place, open, rtlActive } = props;
+  if (props.props){
+     message  = props.props.message
+     open  = props.props.open
+     place= props.props.place
+  }
   var action = [];
   const messageClasses = classNames({
-    [classes.iconMessage]: icon !== undefined
+    [classes.iconMessage]: icon !== undefined,
   });
   if (close !== undefined) {
     action = [
@@ -29,7 +34,7 @@ export default function Snackbar(props) {
         onClick={() => props.closeNotification()}
       >
         <Close className={classes.close} />
-      </IconButton>
+      </IconButton>,
     ];
   }
   return (
@@ -41,7 +46,7 @@ export default function Snackbar(props) {
             ? "left"
             : place.indexOf("c") !== -1
             ? "center"
-            : "right"
+            : "right",
       }}
       open={open}
       message={
@@ -55,8 +60,8 @@ export default function Snackbar(props) {
         classes: {
           root: classes.root + " " + classes[color],
           message: classes.message,
-          action: classNames({ [classes.actionRTL]: rtlActive })
-        }
+          action: classNames({ [classes.actionRTL]: rtlActive }),
+        },
       }}
     />
   );
@@ -70,5 +75,5 @@ Snackbar.propTypes = {
   place: PropTypes.oneOf(["tl", "tr", "tc", "br", "bl", "bc"]),
   open: PropTypes.bool,
   rtlActive: PropTypes.bool,
-  closeNotification: PropTypes.func
+  closeNotification: PropTypes.func,
 };

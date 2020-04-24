@@ -33,9 +33,15 @@ export default function Sidebar(props) {
       {routes.map((prop, key) => {
         if (
           (prop.name === "Dashboard" && !user.username) ||
-          (prop.name === "User Profile" && !user.username)
-        )
+          (prop.name === "User Profile" && !user.username) ||
+          (user.username && prop.name === "Login") ||
+          (user.username && prop.name === "Register") ||
+          (window.innerWidth < 959 && prop.name === "Login") ||
+          (window.innerWidth < 959 && prop.name === "Register")
+        ) {
           return;
+        }
+
         var activePro = " ";
         var listItemClasses;
         if (prop.path === "/upgrade-to-pro") {

@@ -52,7 +52,7 @@ export default function UserLogin() {
       </CardHeader>
       <CardBody>
         <GridContainer>
-          <GridItem xs={5} sm={10} md={7}>
+          <GridItem xs={12} sm={12} md={7}>
             <CustomInput
               labelText="Username"
               name="username"
@@ -63,7 +63,7 @@ export default function UserLogin() {
               }}
             />
           </GridItem>
-          <GridItem xs={12} sm={12} md={6}>
+          <GridItem xs={12} sm={12} md={7}>
             <CustomInput
               labelText="Password"
               value={form.passWord}

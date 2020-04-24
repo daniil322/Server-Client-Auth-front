@@ -32,14 +32,22 @@ export default function UserLogin() {
     setForm({ ...form, [name]: value });
   };
 
-  const login = async () => {
-    if (!form.username || !form.password) return;
+  const onRegisterClick = () => {
+    hist.push("/admin/register");
+  };
+
+  const toggleModal = () => {
+    setSnackBarState({ ...snackbarState, open: true });
+    return setTimeout(() => {
+      setSnackBarState({ ...snackbarState, open: false });
+    }, 2000);
+  };
+
+  const onLoginClick = async () => {
+    if (!form.username || !form.password) toggleModal();
     const ds = await dispatch(setLoggedInUser(form));
     if (!ds) {
-      setSnackBarState({ ...snackbarState, open: true });
-      return setTimeout(() => {
-        setSnackBarState({ ...snackbarState, open: false });
-      }, 2000);
+      toggleModal();
     } else {
       hist.push("/admin/dashboard");
     }
@@ -77,8 +85,11 @@ export default function UserLogin() {
         </GridContainer>
       </CardBody>
       <CardFooter>
-        <Button onClick={login} color="primary">
+        <Button onClick={onLoginClick} color="primary">
           Login
+        </Button>
+        <Button onClick={onRegisterClick} color="primary">
+          Register
         </Button>
       </CardFooter>
       <Snackbar props={snackbarState} message="" />

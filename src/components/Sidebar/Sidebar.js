@@ -12,17 +12,20 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Icon from "@material-ui/core/Icon";
 // core components
-import AdminNavbarLinks from "components/Navbars/AdminNavbarLinks.js";
-import RTLNavbarLinks from "components/Navbars/RTLNavbarLinks.js";
 
 import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "actions/appActions";
 
 const useStyles = makeStyles(styles);
 
 export default function Sidebar(props) {
   const { user } = useSelector((state) => state);
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const onLogoutClick = () => {
+    dispatch(logout());
+  };
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
     return window.location.href.indexOf(routeName) > -1 ? true : false;
@@ -36,8 +39,7 @@ export default function Sidebar(props) {
           (prop.name === "User Profile" && !user.username) ||
           (user.username && prop.name === "Login") ||
           (user.username && prop.name === "Register") ||
-          (window.innerWidth < 959 && prop.name === "Login") ||
-          (window.innerWidth < 959 && prop.name === "Register")
+          (!user.username && prop.name === "Logout")
         ) {
           return;
         }
@@ -59,9 +61,10 @@ export default function Sidebar(props) {
         });
         return (
           <NavLink
-            to={prop.layout + prop.path}
+            to={prop.name === "Logout" ? "/ssss" : prop.layout + prop.path}
             className={activePro + classes.item}
-            activeClassName="active"
+            activeClassName={prop.name === "Logout" ? "" : "active"}
+            onClick={prop.name === "Logout" ? onLogoutClick : null}
             key={key}
           >
             <ListItem button className={classes.itemLink + listItemClasses}>
@@ -105,7 +108,7 @@ export default function Sidebar(props) {
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>
-        {user.username ? user.username : logoText}
+        {user.username ? user.username : ""}
       </a>
     </div>
   );
@@ -127,10 +130,7 @@ export default function Sidebar(props) {
           }}
         >
           {brand}
-          <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
-            {links}
-          </div>
+          <div className={classes.sidebarWrapper}>{links}</div>
           {image !== undefined ? (
             <div
               className={classes.background}

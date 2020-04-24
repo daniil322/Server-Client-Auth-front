@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -6,18 +6,13 @@ import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
-import CardAvatar from "components/Card/CardAvatar.js";
-import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CardHeader from "components/Card/CardHeader.js";
 import UserForm from "../../components/UserForm/UserForm";
-
-import avatar from "assets/img/faces/marc.jpg";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser } from "actions/appActions";
 import Snackbar from "components/Snackbar/Snackbar";
-import { styles } from "../../services/utils";
-import { hist } from "index";
+import { styles, getEmptyForm } from "../../services/utils";
 
 const useStyles = makeStyles(styles);
 
@@ -32,6 +27,10 @@ export default function UserProfile() {
   const [form, setForm] = useState(user);
   const classes = useStyles();
 
+  useEffect(() => {
+    user.username ? setForm(user) : setForm(getEmptyForm());
+  }, [user]);
+
   const updateProfile = async () => {
     if (!form.username) return;
     await dispatch(updateUser(form));
@@ -41,15 +40,10 @@ export default function UserProfile() {
     }, 2000);
   };
 
-  if (!user.username) {
-    hist.push("/");
-    return <div></div>;
-  }
-
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
@@ -61,27 +55,6 @@ export default function UserProfile() {
                 Update Profile
               </Button>
             </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
           </Card>
         </GridItem>
       </GridContainer>

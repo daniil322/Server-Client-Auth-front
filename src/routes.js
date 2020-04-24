@@ -42,6 +42,13 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
+    path: "/login",
+    name: "Login",
+    icon: LibraryBooks,
+    component: UserLogin,
+    layout: "/admin",
+  },
+  {
     path: "/register",
     name: "Register",
     icon: LibraryBooks,
@@ -49,8 +56,8 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/login",
-    name: "Login",
+    path: "/llll",
+    name: "Logout",
     icon: LibraryBooks,
     component: UserLogin,
     layout: "/admin",

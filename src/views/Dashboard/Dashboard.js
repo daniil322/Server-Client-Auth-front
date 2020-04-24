@@ -31,13 +31,10 @@ import {
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import chartsService from "services/chartsService";
 import { useSelector } from "react-redux";
-import { hist } from "index";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
-  const { user } = useSelector((state) => state);
-
   const [data, setData] = useState({
     dailySales: {
       labels: ["M", "T", "W", "T", "F", "S", "S"],
@@ -74,6 +71,7 @@ export default function Dashboard() {
       ["4", "Philip Chaney", "$38,735", "Korea, South"],
     ],
   });
+  const { user } = useSelector((state) => state);
 
   const getChartsData = async () => {
     const chartData = await chartsService.get();
@@ -81,15 +79,11 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
+    if (!user.username) return;
     getChartsData();
-  }, []);
+  }, [user.username]);
 
   const classes = useStyles();
-
-  if (!user.username) {
-    hist.push("/");
-    return <div></div>;
-  }
 
   return (
     <div>

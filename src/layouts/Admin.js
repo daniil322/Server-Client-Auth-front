@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -7,7 +7,6 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
-import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
@@ -16,8 +15,11 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/reactlogo.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Progress from "rsup-progress";
+import { hist } from "index";
+import storageService from "services/storageService";
+import { setLoggedInUser } from "actions/appActions";
 
 let ps;
 
@@ -42,8 +44,9 @@ const switchRoutes = (
 const useStyles = makeStyles(styles);
 
 export default function Admin({ ...rest }) {
-  const { appState } = useSelector((state) => state);
-  const [progress] = useState(new Progress());
+  const dispatch = useDispatch();
+  const { appState, user } = useSelector((state) => state);
+  const [progress] = useState(new Progress({ color: "#942dae" }));
   if (appState === "loading") {
     progress.start();
   } else {
@@ -87,6 +90,25 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
+
+  const [refreashCheck, setRefreashCheck] = useState(
+    user.username ? true : false
+  );
+
+  useEffect(() => {
+    const user = storageService.loadFromStorage();
+    if (!user) return setRefreashCheck(true);
+    dispatch(setLoggedInUser(user));
+  }, [dispatch]);
+  if (
+    !user.username &&
+    window.location.pathname !== "/admin/login" &&
+    window.location.pathname !== "/admin/register" &&
+    refreashCheck
+  ) {
+    hist.push("/admin/login");
+    return <div></div>;
+  }
   return (
     <div className={classes.wrapper}>
       <Sidebar
@@ -113,7 +135,6 @@ export default function Admin({ ...rest }) {
         ) : (
           <div className={classes.map}>{switchRoutes}</div>
         )}
-        {getRoute() ? <Footer /> : null}
       </div>
     </div>
   );

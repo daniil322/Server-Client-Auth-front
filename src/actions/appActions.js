@@ -1,5 +1,6 @@
 import { login, signup, update } from "../services/userService";
 import { getEmptyForm } from "../services/utils";
+import StorageService from "../services/storageService";
 
 const setLoggedInUserAction = (user) => {
   return {
@@ -8,7 +9,7 @@ const setLoggedInUserAction = (user) => {
   };
 };
 
-export const logout = (user = getEmptyForm()) => {
+export const logoutUser = (user) => {
   return {
     type: "SET_USER",
     user,
@@ -26,10 +27,11 @@ export const setLoggedInUser = (user) => {
   return async (dispatch) => {
     try {
       dispatch(setAppState("loading"));
-      const LoggedInUser = await login(user);
-      dispatch(setLoggedInUserAction(LoggedInUser));
+      const loggedInUser = await login(user);
+      dispatch(setLoggedInUserAction(loggedInUser));
       dispatch(setAppState("ready"));
-      return LoggedInUser;
+      StorageService.saveToStorage(loggedInUser);
+      return loggedInUser;
     } catch (err) {
       dispatch(setAppState("ready"));
       console.log("Wrong Password/Username", err);
@@ -37,14 +39,21 @@ export const setLoggedInUser = (user) => {
   };
 };
 
+export const logout = () => {
+  return async (dispatch) => {
+    StorageService.saveToStorage("");
+    dispatch(logoutUser(getEmptyForm()));
+  };
+};
+
 export const userSignUp = (user) => {
   return async (dispatch) => {
     try {
       dispatch(setAppState("loading"));
-      const LoggedInUser = await signup(user);
-      dispatch(setLoggedInUserAction(LoggedInUser));
+      const loggedInUser = await signup(user);
+      dispatch(setLoggedInUserAction(loggedInUser));
       dispatch(setAppState("ready"));
-      return LoggedInUser;
+      return loggedInUser;
     } catch (err) {
       console.log("userName already exists", err);
       dispatch(setAppState("ready"));
@@ -56,10 +65,10 @@ export const updateUser = (user) => {
   return async (dispatch) => {
     try {
       dispatch(setAppState("loading"));
-      const LoggedInUser = await update(user);
-      dispatch(setLoggedInUserAction(LoggedInUser));
+      const loggedInUser = await update(user);
+      dispatch(setLoggedInUserAction(loggedInUser));
       dispatch(setAppState("ready"));
-      return LoggedInUser;
+      return loggedInUser;
     } catch (err) {
       dispatch(setAppState("ready"));
       console.log("Cannot update user try later", err);
